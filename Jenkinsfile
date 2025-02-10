@@ -23,7 +23,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                        /usr/bin/docker build -t ${DOCKER_IMAGE}:latest .
+                        docker build -t ${DOCKER_IMAGE}:latest .
                     """
                 }
             }
@@ -32,7 +32,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 withDockerRegistry([credentialsId: "Dockerhub", url: "https://index.docker.io/v1/"]) {
-                    sh "/usr/bin/docker push ${DOCKER_IMAGE}:latest"
+                    sh "docker push ${DOCKER_IMAGE}:latest"
                 }
             }
         }
