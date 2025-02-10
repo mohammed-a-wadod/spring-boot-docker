@@ -27,3 +27,7 @@ replay_pid*
 .idea/jarRepositories.xml
 .idea/misc.xml
 .idea/vcs.xml
+.DS_Store
+target/maven-archiver/pom.properties
+target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
+target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
