@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'oaaaqa_jenkins-agent' // Runs the pipeline on the agent
+        label 'oaaaqa-jenkins-agent'
     }
 
     environment {
