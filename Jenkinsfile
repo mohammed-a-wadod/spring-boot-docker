@@ -14,8 +14,8 @@ pipeline {
         stage('Copy .jar to Host') {
             steps {
                 script {
-                    // Copy .jar file from the container's workspace to the host system
-                    sh 'cp target/my-app.jar /tmp/my-app.jar'
+                    // Copy demo-0.0.1-SNAPSHOT.jar file from the container's workspace to the host system
+                    sh 'cp target/demo-0.0.1-SNAPSHOT.jar /tmp/demo-0.0.1-SNAPSHOT.jar'
                 }
             }
         }
