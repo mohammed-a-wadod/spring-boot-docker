@@ -4,18 +4,18 @@ pipeline {
     }
 
     environment {
-        GIT_REPO = 'https://github.com/mohammed-a-wadod/spring-boot-docker'
+        GIT_REPO = 'https://github.com/mohammed-a-wadod/spring-boot-docker.git'
         BRANCH = 'main'
         DOCKER_IMAGE = 'mwadod/spring-boot-docker'
         MAVEN_HOME = '/usr/share/maven'
     }
 
     stages {
-        stage('Clone Repository') {
+        /* stage('Clone Repository') {
             steps {
                 git branch: "${BRANCH}", credentialsId: 'GitHub', url: "${GIT_REPO}"
             }
-        }
+        } */
 
         stage('Build with Maven') {
             steps {
