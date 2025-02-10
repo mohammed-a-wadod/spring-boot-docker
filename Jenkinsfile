@@ -1,20 +1,21 @@
 pipeline {
-    agent {
-        label 'oaaaqa-jenkins-agent'
-    }
-
-    environment {
-        GIT_REPO = 'https://github.com/mohammed-a-wadod/spring-boot-docker.git'
-        BRANCH = 'main'
-        DOCKER_IMAGE = 'mwadod/spring-boot-docker'
-        MAVEN_HOME = '/usr/share/maven'
-    }
+    agent any  // Run on any available agent (host)
 
     stages {
         stage('Build with Maven') {
+            agent {
+                docker { image 'maven:3.8.6-openjdk-11' }  // Maven Docker image
+            }
+            steps {
+                sh 'mvn clean install'  // Build the project inside the container
+            }
+        }
+
+        stage('Copy .jar to Host') {
             steps {
                 script {
-                    sh 'mvn clean install -DskipTests'
+                    // Copy .jar file from the container's workspace to the host system
+                    sh 'cp target/my-app.jar /tmp/my-app.jar'
                 }
             }
         }
@@ -22,17 +23,8 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh """
-                        docker build -t ${DOCKER_IMAGE}:latest .
-                    """
-                }
-            }
-        }
-
-        stage('Push Docker Image') {
-            steps {
-                withDockerRegistry([credentialsId: "Dockerhub", url: "https://index.docker.io/v1/"]) {
-                    sh "docker push ${DOCKER_IMAGE}:latest"
+                    // Run Docker build command on the host system (not inside the container)
+                    sh 'docker build -t my-app-image /tmp'
                 }
             }
         }
