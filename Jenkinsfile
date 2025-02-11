@@ -5,7 +5,10 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = 'mwadod/spring-boot-docker'
-        DOCKER_TAG = "1.0.${BUILD_NUMBER}" // Using BUILD_NUMBER for auto-incrementing version
+        DOCKER_TAG = "1.0.${BUILD_NUMBER}"
+        SERVER_IP = "151.104.133.129"
+        SERVER_USER = "webtest"
+        TARGET_PATH = "/home/webtest/test"
     }
 
     stages {
@@ -17,7 +20,20 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Transfer JAR to Server') {
+            steps {
+                script {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'jumping_server_user', keyFileVariable: 'SSH_KEY')]) {
+                        sh """
+                            ssh -i "$SSH_KEY" -o StrictHostKeyChecking=no $SERVER_USER@${SERVER_IP} "mkdir -p ${TARGET_PATH}"
+                            scp -i "$SSH_KEY" -o StrictHostKeyChecking=no spring-boot-docker/target/demo-0.0.1-SNAPSHOT.jar $SERVER_USER@${SERVER_IP}:${TARGET_PATH}/demo-0.0.1-SNAPSHOT.jar
+                        """
+                    }
+                }
+            }
+        }
+
+        /* stage('Build Docker Image') {
             steps {
                 script {
                     sh "docker context use default"
@@ -34,7 +50,7 @@ pipeline {
                     sh "docker push ${DOCKER_IMAGE}:latest"  // Push latest tag
                 }
             }
-        }
+        } */
     }
 
     post {
