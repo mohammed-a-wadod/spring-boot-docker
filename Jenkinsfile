@@ -2,8 +2,6 @@ pipeline {
     agent any  // Run on any available agent (host)
 
     environment {
-        GIT_REPO = 'https://github.com/mohammed-a-wadod/spring-boot-docker.git'
-        BRANCH = 'main'
         DOCKER_IMAGE = 'mwadod/spring-boot-docker'
         MAVEN_HOME = '/usr/share/maven'
     }
@@ -14,6 +12,7 @@ pipeline {
                 docker { image 'maven:3.8.6-openjdk-11' }  // Maven Docker image
             }
             steps {
+                sh 'mvn --version'  // Print Maven version
                 sh 'mvn clean install'  // Build the project inside the container
             }
         }
