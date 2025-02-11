@@ -24,7 +24,6 @@ pipeline {
             steps {
                 script {
                     withCredentials([sshUserPrivateKey(credentialsId: 'jumping_server_user', keyFileVariable: 'SSH_KEY')]) {
-                        sh "pwd"
                         sh """
                             ssh -i "$SSH_KEY" -o StrictHostKeyChecking=no $SERVER_USER@${SERVER_IP} "mkdir -p ${TARGET_PATH}"
                             scp -i "$SSH_KEY" -o StrictHostKeyChecking=no ./target/demo-0.0.1-SNAPSHOT.jar $SERVER_USER@${SERVER_IP}:${TARGET_PATH}/demo-0.0.1-SNAPSHOT.jar
