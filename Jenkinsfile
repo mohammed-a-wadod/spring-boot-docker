@@ -27,7 +27,7 @@ pipeline {
                         sh "pwd"
                         sh """
                             ssh -i "$SSH_KEY" -o StrictHostKeyChecking=no $SERVER_USER@${SERVER_IP} "mkdir -p ${TARGET_PATH}"
-                            scp -i "$SSH_KEY" -o StrictHostKeyChecking=no ./spring-boot-docker/target/demo-0.0.1-SNAPSHOT.jar $SERVER_USER@${SERVER_IP}:${TARGET_PATH}/demo-0.0.1-SNAPSHOT.jar
+                            scp -i "$SSH_KEY" -o StrictHostKeyChecking=no ./target/demo-0.0.1-SNAPSHOT.jar $SERVER_USER@${SERVER_IP}:${TARGET_PATH}/demo-0.0.1-SNAPSHOT.jar
                         """
                     }
                 }
