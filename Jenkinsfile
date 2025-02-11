@@ -38,6 +38,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
+                    sh "docker context use default"
                     sh """
                         docker build -t ${DOCKER_IMAGE}:${NEW_VERSION} -t ${DOCKER_IMAGE}:latest .
                     """
