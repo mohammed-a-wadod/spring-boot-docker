@@ -4,8 +4,6 @@ pipeline {
     }
 
     environment {
-        GIT_REPO = 'https://github.com/mohammed-a-wadod/spring-boot-docker.git'
-        BRANCH = 'main'
         DOCKER_IMAGE = 'mwadod/spring-boot-docker'
         MAVEN_HOME = '/usr/share/maven'
     }
