@@ -1,6 +1,13 @@
 pipeline {
     agent any  // Run on any available agent (host)
 
+    environment {
+        GIT_REPO = 'https://github.com/mohammed-a-wadod/spring-boot-docker.git'
+        BRANCH = 'main'
+        DOCKER_IMAGE = 'mwadod/spring-boot-docker'
+        MAVEN_HOME = '/usr/share/maven'
+    }
+
     stages {
         stage('Build with Maven') {
             agent {
@@ -20,14 +27,22 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Push Docker Image') {
+            steps {
+                withDockerRegistry([credentialsId: "Dockerhub", url: "https://index.docker.io/v1/"]) {
+                    sh "docker push ${DOCKER_IMAGE}:latest"
+                }
+            }
+        }
+
+/*         stage('Build Docker Image') {
             steps {
                 script {
                     // Run Docker build command on the host system (not inside the container)
                     sh 'docker build -t my-app-image /tmp'
                 }
             }
-        }
+        } */
     }
 
     post {
