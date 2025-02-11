@@ -9,7 +9,7 @@ pipeline {
     }
 
     stages {
-        stage('Build with Maven') {
+        /* stage('Build with Maven') {
             steps {
                 script {
                     sh 'mvn clean install -DskipTests'
@@ -24,6 +24,12 @@ pipeline {
                         docker build -t ${DOCKER_IMAGE}:latest .
                     """
                 }
+            }
+        } */
+
+        stage('Check Docker') {
+            steps {
+                sh 'docker info' // Check if Docker is accessible
             }
         }
 
