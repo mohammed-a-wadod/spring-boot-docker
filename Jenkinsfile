@@ -5,7 +5,7 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = 'mwadod/spring-boot-docker'
-        MAVEN_HOME = '/usr/share/maven'
+        DOCKER_TAG = "1.${BUILD_NUMBER}" // Increment tag using Jenkins build number
     }
 
     stages {
@@ -22,7 +22,7 @@ pipeline {
                 script {
                     sh "docker context use default"
                     sh """
-                        docker build -t ${DOCKER_IMAGE}:latest .
+                        docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
                     """
                 }
             }
@@ -31,7 +31,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 withDockerRegistry([credentialsId: "Dockerhub", url: "https://index.docker.io/v1/"]) {
-                    sh "docker push ${DOCKER_IMAGE}:latest"
+                    sh "docker push ${DOCKER_IMAGE}:${DOCKER_TAG}"
                 }
             }
         }
