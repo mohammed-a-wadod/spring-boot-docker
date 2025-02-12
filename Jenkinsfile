@@ -4,6 +4,8 @@ pipeline {
     }
 
     environment {
+        TESTING_IP = credentials('TESTING_IP')
+        PROD_IP = credentials('PROD_IP')
         DOCKER_IMAGE = 'mwadod/spring-boot-docker'
         DOCKER_TAG = "1.0.${BUILD_NUMBER}"
         SERVER_IP = "151.104.133.129"
@@ -12,6 +14,19 @@ pipeline {
     }
 
     stages {
+        stage('Set Deployment IP') {
+            steps {
+                script {
+                    if (env.BRANCH_NAME == 'testing') {
+                        env.DEPLOY_IP = TESTING_IP
+                    } else if (env.BRANCH_NAME == 'main') {
+                        env.DEPLOY_IP = PROD_IP
+                    }
+                    echo "Deploying to: ${env.DEPLOY_IP}"
+                }
+            }
+        }
+
         stage('Build with Maven') {
             steps {
                 script {
@@ -22,7 +37,7 @@ pipeline {
 
         stage('Move File') {
             steps {
-                sh 'mv target/demo-0.0.1-SNAPSHOT.jar /Users/mohamedaw/Documents/Imtac/oaaaqa/Docker/agent/'
+                sh 'mv target/demo-0.0.1-SNAPSHOT.jar ${env.DEPLOY_IP}'
             }
         }
 
