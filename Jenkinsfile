@@ -14,6 +14,11 @@ pipeline {
     }
 
     stages {
+        stage('Checkout') {
+            steps {
+                git branch: env.BRANCH_NAME, url: 'git@your-repo.git'
+            }
+        }
         stage('Set Deployment IP') {
             steps {
                 script {
