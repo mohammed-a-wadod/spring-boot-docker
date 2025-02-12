@@ -17,6 +17,7 @@ pipeline {
         stage('Set Deployment IP') {
             steps {
                 script {
+                    echo "branchName: ${env.BRANCH_NAME}"
                     if (env.BRANCH_NAME == 'testing') {
                         env.DEPLOY_IP = TESTING_IP
                     } else if (env.BRANCH_NAME == 'main') {
