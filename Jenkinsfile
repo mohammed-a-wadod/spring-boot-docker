@@ -2,6 +2,10 @@ pipeline {
     agent {
         label 'oaaaqa-jenkins-agent'
     }
+    
+    parameters {
+        string(name: 'BRANCH_NAME', defaultValue: 'testing', description: 'Enter the branch to deploy (e.g., testing or main)')
+    }
 
     environment {
         TESTING_IP = credentials('TESTING_IP')
@@ -16,19 +20,24 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: env.BRANCH_NAME, url: 'git@your-repo.git'
+                script {
+                    echo "Building branch: ${params.BRANCH_NAME}"
+                    git branch: params.BRANCH_NAME, url: 'https://github.com/mohammed-a-wadod/spring-boot-docker.git'
+                }
             }
         }
+        
         stage('Set Deployment IP') {
             steps {
                 script {
-                    echo "branchName: ${env.BRANCH_NAME}"
-                    if (env.BRANCH_NAME == 'testing') {
+                    if (params.BRANCH_NAME == 'testing') {
                         env.DEPLOY_IP = TESTING_IP
-                    } else if (env.BRANCH_NAME == 'main') {
+                    } else if (params.BRANCH_NAME == 'main') {
                         env.DEPLOY_IP = PROD_IP
+                    } else {
+                        error "Invalid branch selected!"
                     }
-                    echo "Deploying to: ${env.DEPLOY_IP}"
+                    echo "Deploying to masked IP"
                 }
             }
         }
