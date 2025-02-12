@@ -20,6 +20,7 @@ pipeline {
             }
         }
 
+        /*
         stage('Transfer JAR to Server') {
             steps {
                 script {
@@ -32,6 +33,7 @@ pipeline {
                 }
             }
         }
+        /*
 
         /* stage('Build Docker Image') {
             steps {
