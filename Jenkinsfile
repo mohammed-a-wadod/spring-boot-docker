@@ -20,6 +20,12 @@ pipeline {
             }
         }
 
+        stage('Move File') {
+            steps {
+                sh 'mv target/demo-0.0.1-SNAPSHOT.jar /Users/mohamedaw/Documents/Imtac/oaaaqa/Docker/agent/'
+            }
+        }
+
         /*
         stage('Transfer JAR to Server') {
             steps {
@@ -61,6 +67,9 @@ pipeline {
         }
         failure {
             echo 'Pipeline failed!'
+        }
+        always {
+            cleanWs()
         }
     }
 }
