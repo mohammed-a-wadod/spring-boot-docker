@@ -37,7 +37,7 @@ pipeline {
 
         stage('Move File') {
             steps {
-                sh 'mv target/demo-0.0.1-SNAPSHOT.jar ${env.DEPLOY_IP}'
+                sh "mv target/demo-0.0.1-SNAPSHOT.jar ${env.DEPLOY_IP}"
             }
         }
 
