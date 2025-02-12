@@ -2,8 +2,14 @@ pipeline {
     agent {
         label 'oaaaqa-jenkins-agent'
     }
+    
+    parameters {
+        string(name: 'BRANCH_NAME', defaultValue: 'testing', description: 'Enter the branch to deploy (e.g., testing or main)')
+    }
 
     environment {
+        TESTING_IP = credentials('TESTING_IP')
+        PROD_IP = credentials('PROD_IP')
         DOCKER_IMAGE = 'mwadod/spring-boot-docker'
         DOCKER_TAG = "1.0.${BUILD_NUMBER}"
         SERVER_IP = "151.104.133.129"
@@ -12,6 +18,30 @@ pipeline {
     }
 
     stages {
+        stage('Checkout') {
+            steps {
+                script {
+                    echo "Building branch: ${params.BRANCH_NAME}"
+                    git branch: params.BRANCH_NAME, url: 'https://github.com/mohammed-a-wadod/spring-boot-docker.git'
+                }
+            }
+        }
+        
+        stage('Set Deployment IP') {
+            steps {
+                script {
+                    if (params.BRANCH_NAME == 'testing') {
+                        env.DEPLOY_IP = TESTING_IP
+                    } else if (params.BRANCH_NAME == 'main') {
+                        env.DEPLOY_IP = PROD_IP
+                    } else {
+                        error "Invalid branch selected!"
+                    }
+                    echo "Deploying to masked IP"
+                }
+            }
+        }
+
         stage('Build with Maven') {
             steps {
                 script {
@@ -22,7 +52,7 @@ pipeline {
 
         stage('Move File') {
             steps {
-                sh 'mv target/demo-0.0.1-SNAPSHOT.jar /Users/mohamedaw/Documents/Imtac/oaaaqa/Docker/agent/'
+                sh "mv target/demo-0.0.1-SNAPSHOT.jar ${env.DEPLOY_IP}"
             }
         }
 
