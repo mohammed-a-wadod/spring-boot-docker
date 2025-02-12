@@ -12,12 +12,3 @@ public class DemoApplication {
         SpringApplication.run(DemoApplication.class, args);
     }
 }
-
-@RestController
-@RequestMapping("/api")
-class HelloController {
-    @GetMapping("/hello")
-    public String sayHi() {
-        return "Hi main";
-    }
-}
